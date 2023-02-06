@@ -2,10 +2,7 @@
 const Excel = require('exceljs')
 
 import FileSaver from 'file-saver'
-export var testaaa = function (){
-  console.log("...");
-}
-export var exportExcel = function(luckysheet, value) {
+export const exportExcel = function (luckysheet, value) {
   // 参数为luckysheet.getluckysheetfile()获取的对象
   // 1.创建工作簿，可以为工作簿添加属性
   const workbook = new Excel.Workbook()
@@ -13,8 +10,8 @@ export var exportExcel = function(luckysheet, value) {
   if (Object.prototype.toString.call(luckysheet) === '[object Object]') {
     luckysheet = [luckysheet]
   }
-  luckysheet.forEach(function(table) {
-    if (table.data.length === 0) return  true
+  luckysheet.forEach(function (table) {
+    if (table.data.length === 0) return true
     // ws.getCell('B2').fill = fills.
     const worksheet = workbook.addWorksheet(table.name)
     const merge = (table.config && table.config.merge) || {}
@@ -39,9 +36,9 @@ export var exportExcel = function(luckysheet, value) {
   return buffer
 }
 
-var setMerge = function(luckyMerge = {}, worksheet) {
+let setMerge = function (luckyMerge = {}, worksheet) {
   const mergearr = Object.values(luckyMerge)
-  mergearr.forEach(function(elem) {
+  mergearr.forEach(function (elem) {
     // elem格式：{r: 0, c: 0, rs: 1, cs: 2}
     // 按开始行，开始列，结束行，结束列合并（相当于 K10:M12）
     worksheet.mergeCells(
@@ -53,10 +50,10 @@ var setMerge = function(luckyMerge = {}, worksheet) {
   })
 }
 
-var setBorder = function(luckyBorderInfo, worksheet) {
+let setBorder = function (luckyBorderInfo, worksheet) {
   if (!Array.isArray(luckyBorderInfo)) return
   // console.log('luckyBorderInfo', luckyBorderInfo)
-  luckyBorderInfo.forEach(function(elem) {
+  luckyBorderInfo.forEach(function (elem) {
     // 现在只兼容到borderType 为range的情况
     // console.log('ele', elem)
     if (elem.rangeType === 'range') {
@@ -90,10 +87,10 @@ var setBorder = function(luckyBorderInfo, worksheet) {
     // worksheet.getCell(rang.row_focus + 1, rang.column_focus + 1).border = border
   })
 }
-var setStyleAndValue = function(cellArr, worksheet) {
+let setStyleAndValue = function (cellArr, worksheet) {
   if (!Array.isArray(cellArr)) return
-  cellArr.forEach(function(row, rowid) {
-    row.every(function(cell, columnid) {
+  cellArr.forEach(function (row, rowid) {
+    row.every(function (cell, columnid) {
       if (!cell) return true
       let fill = fillConvert(cell.bg)
 
@@ -137,7 +134,7 @@ var setStyleAndValue = function(cellArr, worksheet) {
   })
 }
 
-var fillConvert = function(bg) {
+let fillConvert = function (bg) {
   if (!bg) {
     return {}
   }
@@ -150,7 +147,7 @@ var fillConvert = function(bg) {
   return fill
 }
 
-var fontConvert = function(
+let fontConvert = function (
   ff = 0,
   fc = '#000000',
   bl = 0,
@@ -174,7 +171,7 @@ var fontConvert = function(
     10: 'Times New Roman ',
     11: 'Tahoma ',
     12: 'Verdana',
-    num2bl: function(num) {
+    num2bl: function (num) {
       return num === 0 ? false : true
     }
   }
@@ -194,7 +191,7 @@ var fontConvert = function(
   return font
 }
 
-var alignmentConvert = function(
+let alignmentConvert = function (
   vt = 'default',
   ht = 'default',
   tb = 'default',
@@ -240,7 +237,7 @@ var alignmentConvert = function(
   return alignment
 }
 
-var borderConvert = function(borderType, style = 1, color = '#000') {
+let borderConvert = function (borderType, style = 1, color = '#000') {
   // 对应luckysheet的config中borderinfo的的参数
   if (!borderType) {
     return {}
@@ -287,7 +284,7 @@ var borderConvert = function(borderType, style = 1, color = '#000') {
   return border
 }
 
-function addborderToCell(borders, row_index, col_index) {
+function addborderToCell (borders, row_index, col_index) {
   let border = {}
   const luckyExcel = {
     type: {
@@ -332,7 +329,7 @@ function addborderToCell(borders, row_index, col_index) {
   return border
 }
 
-function createCellPos(n) {
+function createCellPos (n) {
   let ordA = 'A'.charCodeAt(0)
 
   let ordZ = 'Z'.charCodeAt(0)
